@@ -4,7 +4,9 @@ import pandas as pd
 import numpy as np 
 import function as f
 
-####```This script is for seeing if the pot is running and filtering the noisy cursor using a exponential filter\
+'''
+This script is for seeing if the pot is running and filtering the noisy cursor using a exponential filter\
+'''
 
 #set variables
 time_sec = 5

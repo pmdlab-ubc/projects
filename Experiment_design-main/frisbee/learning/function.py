@@ -57,11 +57,13 @@ def get_calibration_coeffs(calibration_voltages, calibration_pixels):
 
 def volt_to_pix(current_voltage):
 
-    coeffs = [ -33.32399529, 31.36390112, -3051.37705026, 2956.61650997]
+    coeffs = [1718.79734603, -10845.96261347, 26018.35762271, -22670.53264086]
    
     # Calculate the pixel value using the polynomial math
     calculated_pixel = np.polyval(coeffs, current_voltage)
    
     # Return as integer 
     return int(calculated_pixel)
+
+
 

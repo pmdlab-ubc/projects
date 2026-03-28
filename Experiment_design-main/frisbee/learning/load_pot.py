@@ -3,46 +3,53 @@ from psychopy import visual, core, event
 import pandas as pd
 import numpy as np 
 import function as f
-
-####```This script is for checking to see if the pot is running
+import gregg_func as lib
+'''
+This script is for checking to see if the pot is running
+'''
 
 ### initialize task
-timer = core.Clock()
-task = nidaqmx.Task() #the with statement automatically closes it 
-task.ai_channels.add_ai_voltage_chan("Dev1/ai1", min_val = -5.0, max_val = 5.0) #adds a voltage channel 
-task.timing.cfg_samp_clk_timing(1000, sample_mode =nidaqmx.constants.AcquisitionType.CONTINUOUS)
-task.start()
+# timer = core.Clock()
+# task = nidaqmx.Task() #the with statement automatically closes it 
+# task.ai_channels.add_ai_voltage_chan("Dev1/ai1", min_val = -5.0, max_val = 5.0) #adds a voltage channel 
+# task.timing.cfg_samp_clk_timing(1000, sample_mode =nidaqmx.constants.AcquisitionType.CONTINUOUS)
+# task.start()
 
 time_sec = 5
 
-screen_to_use =1
-window = visual.Window(
-    fullscr=True,
-    monitor="testMonitor",
-    units="pix",
-    color="white",
-    # waitBlanking=False,
-    screen=1,
-    size=[3440, 1440],
-)
+# screen_to_use =1
+# window = visual.Window(
+#     fullscr=True,
+#     monitor="testMonitor",
+#     units="pix",
+#     color="white",
+#     # waitBlanking=False,
+#     screen=1,
+#     size=[3440, 1440],
+# )
 
-cursor = visual.Circle(window, radius = 20, fillColor ='black')
-# target = visual.Circle(window, radius = 30, fillColor ='blue',pos=(-860, 0), units='pix')
-# target_hit = visual.Circle(window, radius = 40, fillColor ='red',pos=(860, 0), units='pix')
-# cal_target = visual.Line(window, start=(-1720, 0), end=(-1715, 0), lineColor='black', lineWidth=2)
+# cursor = visual.Circle(window, radius = 20, fillColor ='black')
+# # target = visual.Circle(window, radius = 30, fillColor ='blue',pos=(-860, 0), units='pix')
+# # target_hit = visual.Circle(window, radius = 40, fillColor ='red',pos=(860, 0), units='pix')
+# # cal_target = visual.Line(window, start=(-1720, 0), end=(-1715, 0), lineColor='black', lineWidth=2)
 
 
 
 timer = core.Clock()
 
+# while timer.getTime() < time_sec:
+#     pot_data=f.get_data(task)
+#     new_position = f.volt_to_pix(pot_data[-1])
+#     print(new_position)
+#     cursor.pos = [new_position, 0] #x and y
+#     cursor.draw()
+#     window.flip()
 while timer.getTime() < time_sec:
-    pot_data=f.get_data(task)
-    new_position = f.volt_to_pix(pot_data[-1])
-    print(new_position)
-    cursor.pos = [new_position, 0] #x and y
-    cursor.draw()
-    window.flip()
-
+    output_task = lib.configure_output()
+    output_task.start()
+    output_task.write([False,False])
+    output_task.close()
+    
 
 
 

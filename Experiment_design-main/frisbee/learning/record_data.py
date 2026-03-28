@@ -31,17 +31,35 @@ window = visual.Window(
 cursor = visual.Circle(window, radius = 20, fillColor ='black')
 target = visual.Circle(window, radius = 30, fillColor='red', pos=(860,0), units='pix')
 
+
+#empty position list
+datapoint = []
+time_hit=[]
 current =  [f.volt_to_pix(f.get_voltage(task)[-1])]
 globalclock = core.Clock()
 globalclock.reset()
 
+target_hit_detected = False
 while globalclock.getTime() < time_sec:
     prev_pos = current[0]
     pot_data =f.get_voltage(task)
-    print(pot_data)
+    # print(pot_data)
     new_position = f.volt_to_pix(pot_data[-1]) #takes last voltage reading
     current = [f.expo_filt(new_position,current[0], 0.1)]
     cursor.pos= [current[0],0]
     cursor.draw()
     target.draw()
     window.flip()
+
+    if not target_hit_detected and target.contains(cursor.pos):
+        hit_pos = cursor.pos
+        hit_time = globalclock.getTime()
+        target_hit_detected =True
+        target.opacity = 0
+        cursor.opacity = 0
+        datapoint.append(hit_pos[0])
+        time_hit.append(hit_time)
+print(datapoint,time_hit)
+
+
+
